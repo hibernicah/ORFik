@@ -45,7 +45,8 @@
 #'
 computeFeatures <- function(grl, RFP, RNA = NULL,  Gtf, faFile = NULL,
                             riboStart = 26, riboStop = 34, orfFeatures = TRUE,
-                            includeNonVarying = TRUE, grl.is.sorted = FALSE) {
+                            includeNonVarying = TRUE, grl.is.sorted = FALSE,
+                            tx.has.cds = FALSE) {
   #### Check input and load data ####
   validGRL(class(grl), "grl")
   checkRFP(class(RFP))
@@ -60,7 +61,7 @@ computeFeatures <- function(grl, RFP, RNA = NULL,  Gtf, faFile = NULL,
 
   return(allFeaturesHelper(grl, RFP, RNA, tx, fiveUTRs, cds, threeUTRs, faFile,
                            riboStart, riboStop, orfFeatures, includeNonVarying,
-                           grl.is.sorted))
+                           grl.is.sorted, tx.has.cds))
 }
 
 #' Get all possible features in ORFik
@@ -134,7 +135,7 @@ computeFeaturesCage <- function(grl, RFP, RNA = NULL, Gtf = NULL, tx = NULL,
                                 fiveUTRs = NULL, cds = NULL, threeUTRs = NULL,
                                 faFile = NULL, riboStart = 26, riboStop = 34,
                                 orfFeatures = TRUE, includeNonVarying = TRUE,
-                                grl.is.sorted = FALSE) {
+                                grl.is.sorted = FALSE, tx.has.cds = FALSE) {
   #### Check input and load data ####
   validGRL(class(grl))
   checkRFP(class(RFP))
@@ -218,11 +219,16 @@ allFeaturesHelper <- function(grl, RFP, RNA, tx, fiveUTRs, cds , threeUTRs,
       } else {
         message("faFile not included, skipping kozak sequence score")
       }
+     
+     if (tx.has.cds){
       # switch five with tx, is it possible to use ?
-      # scores[, distORFCDS := distToCds(grl, fiveUTRs, cds)]
-      # scores[, inFrameCDS := isInFrame(distORFCDS)]
-      # scores[, isOverlappingCds := isOverlapping(distORFCDS)]
-      # scores[, rankInTx := rankOrder(grl)]
+       scores[, distORFCDS := distToCds(grl, fiveUTRs, cds)]
+       scores[, inFrameCDS := isInFrame(distORFCDS)]
+       scores[, isOverlappingCds := isOverlapping(distORFCDS)]
+       scores[, rankInTx := rankOrder(grl)]
+     } else {
+       message("tx.has.cds set to False, dropping some orf features.")
+     }
     }
   } else {
     message("orfFeatures set to False, dropping all orf features.")
