@@ -219,10 +219,10 @@ allFeaturesHelper <- function(grl, RFP, RNA, tx, fiveUTRs, cds , threeUTRs,
         message("faFile not included, skipping kozak sequence score")
       }
       # switch five with tx, is it possible to use ?
-      scores[, distORFCDS := distToCds(grl, fiveUTRs, cds)]
-      scores[, inFrameCDS := isInFrame(distORFCDS)]
-      scores[, isOverlappingCds := isOverlapping(distORFCDS)]
-      scores[, rankInTx := rankOrder(grl)]
+      # scores[, distORFCDS := distToCds(grl, fiveUTRs, cds)]
+      # scores[, inFrameCDS := isInFrame(distORFCDS)]
+      # scores[, isOverlappingCds := isOverlapping(distORFCDS)]
+      # scores[, rankInTx := rankOrder(grl)]
     }
   } else {
     message("orfFeatures set to False, dropping all orf features.")
