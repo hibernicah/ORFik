@@ -177,7 +177,7 @@ computeFeaturesCage <- function(grl, RFP, RNA = NULL, Gtf = NULL, tx = NULL,
 #' @return a data.table with features
 allFeaturesHelper <- function(grl, RFP, RNA, tx, fiveUTRs, cds , threeUTRs,
                               faFile, riboStart, riboStop, orfFeatures,
-                              includeNonVarying, grl.is.sorted) {
+                              includeNonVarying, grl.is.sorted, tx.has.cds = FALSE) {
   if (!grl.is.sorted) {
     grl <- sortPerGroup(grl)
   }
